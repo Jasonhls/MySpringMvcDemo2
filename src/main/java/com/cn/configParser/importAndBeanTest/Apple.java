@@ -1,4 +1,4 @@
-package com.cn.configParser.importTest;
+package com.cn.configParser.importAndBeanTest;
 
 /**
  * @description:

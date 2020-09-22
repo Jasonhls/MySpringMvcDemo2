@@ -1,4 +1,4 @@
-package com.cn.configParser.importTest.location;
+package com.cn.configParser.importAndBeanTest.location;
 
 import org.springframework.stereotype.Component;
 

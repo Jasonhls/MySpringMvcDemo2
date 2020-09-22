@@ -2,9 +2,9 @@ package com.cn.configParser;
 
 import com.cn.configParser.componentScanTest.MyConfig;
 import com.cn.configParser.componentScanTest.Student;
-import com.cn.configParser.importTest.Apple;
-import com.cn.configParser.importTest.ImportConfig;
-import com.cn.configParser.importTest.location.Banana;
+import com.cn.configParser.importAndBeanTest.Apple;
+import com.cn.configParser.importAndBeanTest.ImportConfig;
+import com.cn.configParser.importAndBeanTest.location.Banana;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -30,7 +30,7 @@ public class ConfigParserTest {
     @Test
     public void testImportConfig() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ImportConfig.class);
-        Apple apple = (Apple) context.getBean("apple");
+        Apple apple = (Apple) context.getBean("com.cn.configParser.importAndBeanTest.Apple");
         System.out.println(apple.getName() + "; " + apple.getColor() + "; " + apple.getTaste());
         Banana banana = (Banana) context.getBean("banana");
         System.out.println(banana.getName() + "; " + banana.getProducingArea());

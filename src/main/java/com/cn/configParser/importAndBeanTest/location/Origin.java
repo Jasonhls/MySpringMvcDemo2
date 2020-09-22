@@ -1,13 +1,10 @@
-package com.cn.configParser.importTest.location;
-
-import org.springframework.stereotype.Component;
+package com.cn.configParser.importAndBeanTest.location;
 
 /**
- * @description:
+ * @description: 如果没有包扫描，只有@Component，是不会把这个类作为bean注入spring容器中的
  * @author: helisen
  * @create: 2020-09-21 15:08
  **/
-@Component
 public class Origin {
     private String name;
     private String taste;
