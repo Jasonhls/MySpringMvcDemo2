@@ -16,6 +16,9 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @PropertySource(value = {"/properties/db.properties"})
 public class MyValueConfig {
     /**
+     * 要想使用@Value 用${}占位符注入属性，这个bean是必须的，这个就是占位bean,另一种方式是不用value直接用Environment变量直接getProperty('key')
+     *
+     * 原理：
      * 添加自定义的PropertySourcesPlaceholderConfigurer，会被封装到StringValueResolver对象中，然后添加到AbstractBeanFactory的属性embeddedValueResolvers中
      * 这样在注入属性值的时候，就可以把@Value("${db.driverClass")中对应的配置db.properties中的db.driverClass的值设置进去，因为自定义的db.properties文件中的变量都会
      * 解析存放到容器的environment中，然后通过EnvironmentAware，将容器的environment赋值给自定义的PropertySourcesPlaceholderConfigurer，
@@ -24,7 +27,7 @@ public class MyValueConfig {
      * @return
      */
     @Bean
-    public PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 }

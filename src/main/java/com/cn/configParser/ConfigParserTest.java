@@ -64,7 +64,7 @@ public class ConfigParserTest {
     }
 
     /**
-     * 使用注解方式测试注解@PropertySource与@Value
+     * 使用注解方式测试注解@PropertySource与@Value，必须自定义一个PropertySourcesPlaceholderConfigurer，并注入到spring容器中
      */
     @Test
     public void testPropertySourceAndValueWithConfig() {
