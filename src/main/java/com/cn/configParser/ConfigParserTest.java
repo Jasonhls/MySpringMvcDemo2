@@ -5,11 +5,13 @@ import com.cn.configParser.componentScanTest.Student;
 import com.cn.configParser.importAndBeanTest.Apple;
 import com.cn.configParser.importAndBeanTest.ImportConfig;
 import com.cn.configParser.importAndBeanTest.location.Banana;
-import com.cn.configParser.propertySourceConfig.scanPackage.DBConnection;
 import com.cn.configParser.propertySourceConfig.EnvironmentPropertySourceConfig;
 import com.cn.configParser.propertySourceConfig.TestBean;
+import com.cn.configParser.valueConfig.MyValueComponent;
+import com.cn.configParser.valueConfig.MyValueConfig;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @description:
@@ -49,13 +51,25 @@ public class ConfigParserTest {
         System.out.println(tb.toString());
     }
 
+
     /**
-     * 测试注解@PropertySource与@Value一起用
+     * 使用xml方式测试@Value和@propertySource，xml方式解析property-placeholder标签的时候会向AbstractBeanFactory的
+     * 属性embeddedValueResolvers添加StringValueResolver对象，用于解析@Value的
      */
     @Test
-    public void testPropertySourceAndValue() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.cn.configParser.propertySourceConfig.scanPackage");
-        DBConnection dbConnection =  context.getBean(DBConnection.class);
-        dbConnection.printDBConfigs();
+    public void testPropertySourceAndValueWithXml() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/xml/springValueTestOne.xml");
+        MyValueComponent bean = context.getBean(MyValueComponent.class);
+        System.out.println(bean.getDriverClass() + "; " + bean.getDbUrl() + "; " + bean.getUserName() + "; " + bean.getPassword());
+    }
+
+    /**
+     * 使用注解方式测试注解@PropertySource与@Value
+     */
+    @Test
+    public void testPropertySourceAndValueWithConfig() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyValueConfig.class);
+        MyValueComponent bean = context.getBean(MyValueComponent.class);
+        System.out.println(bean.getDriverClass() + "; " + bean.getDbUrl() + "; " + bean.getUserName() + "; " + bean.getPassword());
     }
 }
