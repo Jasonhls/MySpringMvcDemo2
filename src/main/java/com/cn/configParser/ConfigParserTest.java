@@ -1,5 +1,7 @@
 package com.cn.configParser;
 
+import com.cn.configParser.autowiredTest.AutowiredConfig;
+import com.cn.configParser.autowiredTest.House;
 import com.cn.configParser.componentScanTest.MyConfig;
 import com.cn.configParser.componentScanTest.Student;
 import com.cn.configParser.importAndBeanTest.Apple;
@@ -71,5 +73,16 @@ public class ConfigParserTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyValueConfig.class);
         MyValueComponent bean = context.getBean(MyValueComponent.class);
         System.out.println(bean.getDriverClass() + "; " + bean.getDbUrl() + "; " + bean.getUserName() + "; " + bean.getPassword());
+    }
+
+    /**
+     * @Autowired注解源码分析
+     */
+    @Test
+    public void testAutowired() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AutowiredConfig.class);
+        House house = context.getBean(House.class);
+        String result = house.live();
+        System.out.println(result);
     }
 }
