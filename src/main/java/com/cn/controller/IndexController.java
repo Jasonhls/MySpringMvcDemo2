@@ -1,10 +1,12 @@
 package com.cn.controller;
 
+import com.cn.pojo.Student;
 import com.cn.service.DemoService;
 import com.cn.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,15 @@ public class IndexController {
     public String testServiceUseController(String name) {
         System.out.println(demoService.sayHello(name));
         return "efg";
+    }
+
+    @RequestMapping(value = "/returnJson")
+    @ResponseBody
+    public Student returnJson() {
+        Student s = new Student();
+        s.setName("hls");
+        s.setAge(28);
+        return s;
     }
 
 

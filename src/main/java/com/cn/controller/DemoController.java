@@ -2,6 +2,7 @@ package com.cn.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @description:
@@ -12,6 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DemoController {
     @RequestMapping(value = "/hello")
     public String sayHello() {
+        return "abc";
+    }
+
+    @RequestMapping(value = "/testException")
+    @ResponseBody
+    public String testException() {
+        int i = 1 / 0;
         return "abc";
     }
 }
