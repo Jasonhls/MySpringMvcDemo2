@@ -1,6 +1,9 @@
 package com.cn.config;
 
+import com.cn.servletContextListener.MyServletContextListener;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.ServletContext;
 
 /**
  * @description:
@@ -53,5 +56,18 @@ public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    /**
+     * <listener>
+     *     <listener-class>com.cn.servletContextListener.MyServletContextListener</listener-class>
+     *   </listener>
+     * @param servletContext
+     */
+    @Override
+    protected void registerContextLoaderListener(ServletContext servletContext) {
+        super.registerContextLoaderListener(servletContext);
+        //添加自定义的ServletContextListener
+        servletContext.addListener(MyServletContextListener.class);
     }
 }
