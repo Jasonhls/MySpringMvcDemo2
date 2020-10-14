@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * @author: helisen
  * @create: 2020-10-13 17:32
  **/
-@Configuration
 public class MyCustomConfigSupport {
 	@Bean
 	public MyOtherBean myOtherBean() {
