@@ -1,4 +1,4 @@
-package com.cn.controller;
+package com.cn.subClassAndParentClass;
 
 import com.cn.service.DemoService;
 import com.cn.service.DemoServiceImpl;
