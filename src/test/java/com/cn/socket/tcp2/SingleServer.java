@@ -1,4 +1,4 @@
-package com.cn.socket;
+package com.cn.socket.tcp2;
 
 import java.io.*;
 import java.net.Socket;
