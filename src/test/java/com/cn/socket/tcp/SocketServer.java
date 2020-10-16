@@ -22,14 +22,16 @@ public class SocketServer {
 		//4.使用字节输入流对象的方法read，读取客户端发送的数据
 		byte[] bytes = new byte[1024];
 		int len;
-		while((len = is.read(bytes)) != 0) {
-			//打印出客户端请求的参数
-			System.out.println(new String(bytes,0,len));
-		}
 		//5.使用Socket对象获取字节输出流
 		OutputStream os = socket.getOutputStream();
-		//6.使用字节输出流对象的方法write，给客户端回写数据
-		os.write("收到，谢谢".getBytes());
+		while((len = is.read(bytes)) > 0) {
+			//打印出客户端请求的参数
+			String data = new String(bytes, 0, len);
+			System.out.println("客户端请求的数据为：" + data);
+			//6.使用字节输出流对象的方法write，给客户端回写数据
+			os.write("收到，谢谢，大家吃晚饭了吗？我好饿呀，真的太饿了".getBytes());
+		}
+		System.out.println("释放资源了");
 		//7.释放资源
 		socket.close();
 		serverSocket.close();
