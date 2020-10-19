@@ -30,7 +30,7 @@ public class NioClient {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             while(true) {
                 byte[] bytes = new byte[1024];
-                System.out.println("-----开始输入数据之前------");
+                System.out.println("请输入数据：");
                 System.in.read(bytes);//阻塞在这行代码这里，输入了值之后按enter，才会继续执行下面的代码
                 System.out.println("-----输入数据之后-------");
                 //将数据放到缓存中

@@ -17,6 +17,12 @@ import java.util.Iterator;
  * @create: 2020-10-19 09:42
  **/
 public class NioServer implements Runnable{
+
+    public static void main(String[] args) {
+        new Thread(new NioServer(8379)).start();
+    }
+
+
     private Selector selector;
     private ByteBuffer buffer = ByteBuffer.allocate(1024);
 
@@ -89,6 +95,7 @@ public class NioServer implements Runnable{
                      * 当获取一个SelectionKey，就要将它删除，表示我们已经对这个IO时间做了处理了
                      */
                     keyIterator.remove();
+                    System.out.println("-------------这次事件处理完了------------");
                 }
             }
         } catch (Exception e) {
@@ -159,20 +166,7 @@ public class NioServer implements Runnable{
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-           /* //如果没有数据，返回-1
-            try {
-                key.channel().close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            key.cancel();*/
         }
     }
-
-    public static void main(String[] args) {
-        new Thread(new NioServer(8379)).start();
-    }
-
 
 }
