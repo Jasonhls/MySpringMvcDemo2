@@ -25,6 +25,7 @@ public class NioServer implements Runnable{
 
     private Selector selector;
     private ByteBuffer buffer = ByteBuffer.allocate(1024);
+    private ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
 
     public NioServer(int port) {
         try {
@@ -157,13 +158,18 @@ public class NioServer implements Runnable{
             while((len = sc.read(buffer)) > 0) {
                 buffer.flip();//将缓存的写模式切换到读模式
                 System.out.println(new String(buffer.array(), 0, len));
-                /*
-                方式二：
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);//将缓存中的数据读取到字节数组中
-                String str = new String(bytes).trim();*/
                 buffer.clear();//清空缓存
+
+                /**
+                 * 立马给客户端作出响应
+                 */
+                writeBuffer.put("已经完成数据的读取".getBytes());
+                //上面向缓存中写入数据，position位置变化了，需要回到初始位置，使用flip方法
+                writeBuffer.flip();
+                sc.write(writeBuffer);
+                writeBuffer.clear();
             }
+            System.out.println("read over");
         } catch (IOException e) {
             e.printStackTrace();
         }

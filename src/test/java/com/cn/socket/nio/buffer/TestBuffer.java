@@ -36,13 +36,12 @@ import java.nio.ByteBuffer;
 public class TestBuffer {
     @Test
     public void test2() {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        buffer.put("abcde".getBytes());
-        //开始mark为-1，position为0，limit为5
+        ByteBuffer buffer = ByteBuffer.allocate(1024);// mark -1 position 0 limit 1024 capacity 1024
+        buffer.put("abcde".getBytes());//mark -1 position 5 limit 1024 capacity 1024
         System.out.println(buffer.position());
 
         /**
-         * 会将position变成0，limit变成5，capacity还是1024
+         * mark还是-1，position变成0，limit变成5，capacity还是1024
          */
         buffer.flip();
         //buffer.limit()为5，初始化字节数组，五个元素默认值都为0

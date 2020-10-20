@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @description:
@@ -12,6 +14,8 @@ import java.nio.channels.SocketChannel;
  **/
 public class NioClient {
     public static void main(String[] args) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ByteBuffer readBuffer = ByteBuffer.allocate(1024);
         InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8379);
         SocketChannel sc = null;
         try {
@@ -41,6 +45,10 @@ public class NioClient {
                 sc.write(buffer);
                 //清空缓存
                 buffer.clear();
+                /**
+                 * 异步处理服务端响应回来的数据
+                 */
+                executorService.execute(new DealWithResp(readBuffer, sc));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,6 +56,34 @@ public class NioClient {
             if(sc != null) {
                 try {
                     sc.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    static class DealWithResp implements Runnable{
+        private ByteBuffer buffer;
+        private SocketChannel sc;
+
+        public DealWithResp(ByteBuffer buffer, SocketChannel sc) {
+            this.buffer = buffer;
+            this.sc = sc;
+        }
+
+        @Override
+        public void run() {
+            boolean flag = false;
+            while(!flag) {
+                try {
+                    int len;
+                    while((len = sc.read(buffer)) > 0) {
+                        buffer.flip();
+                        System.out.println("服务端响应回来的数据：" + new String(buffer.array(), 0, len));
+                        buffer.clear();
+                        flag = true;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
