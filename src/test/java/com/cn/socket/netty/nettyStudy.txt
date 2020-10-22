@@ -1,0 +1,7 @@
+TCP是个"流"协议，所谓流，就是没有界限的一串数据。一个完整的包可能会被TCP拆分成多个包进行发送，
+也有可能把多个小的包封装成一个大的数据包发送，这就是所谓的TCP粘包和拆包问题。
+Netty提供了四个拆包器：
+FixedLengthFrameDecoder：固定长度的拆包器，Netty会把固定长度的数据包发送给下一个channelHandler
+LineBasedFrameDecoder：行拆包器，每个数据包以换行符分隔发送
+DelimiterBasedFrameDecoder：分隔符拆包器，可以自定义分隔符，行拆包器是分隔符拆包器的一种特例
+LengthFieldBasedFrameDecoder：基于长度域的拆包器，如果自定义协议中包括长度域的字段，就可以使用这个拆包器
