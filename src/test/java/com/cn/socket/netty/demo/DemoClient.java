@@ -10,6 +10,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
@@ -37,7 +39,9 @@ public class DemoClient {
                              * 客户端配置心跳包
                              */
                             socketChannel.pipeline().addLast(new IdleStateHandler(5, 5, 10));
-                            //添加handler
+                            /**
+                             * 添加handler
+                             */
                             socketChannel.pipeline().addLast(new DemoClientHandler());
                         }
                     });

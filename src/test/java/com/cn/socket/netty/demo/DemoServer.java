@@ -11,6 +11,8 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
@@ -42,7 +44,9 @@ public class DemoServer {
                              */
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024,
                                     Unpooled.copiedBuffer(Config.DATA_PACK_SEPARATOR.getBytes())));
-                            //添加handler
+                            /**
+                             * 添加handler
+                             */
                             socketChannel.pipeline().addLast(new DemoServerHandler());
                         }
                     });
