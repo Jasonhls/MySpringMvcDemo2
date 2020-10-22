@@ -51,10 +51,10 @@ public class DemoServerHandler extends ChannelInboundHandlerAdapter {
             byte[] bytes = new byte[byteBuf.readableBytes()];
             if(byteBuf.isReadable()) {
                 byteBuf.readBytes(bytes);
-                System.out.println("处理客户端请求的数据：" + new String(bytes));
+                System.out.println("收到客户端发来的消息：" + new String(bytes));
 
-                byteBuf.writeBytes("已经处理完客户端的请求，返回数据给客户端".getBytes());
-                ctx.writeAndFlush(byteBuf);
+                ByteBuf responseByteBuf = Unpooled.copiedBuffer("处理完客户端的请求，返回给客户端", Charset.forName("utf-8"));
+                ctx.writeAndFlush(responseByteBuf);
             }
         } finally {
             ReferenceCountUtil.release(msg);
