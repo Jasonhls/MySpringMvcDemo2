@@ -1,0 +1,15 @@
+我们上面在发送数据时，需要通过ByteBuf来转换String，而通过配置编码，解码器，我们就可以直接发送字符串。配置如下：
+
+在服务端与客户端的channelHandler分别增加以下配置：
+
+@Override
+protected void initChannel(SocketChannel channel) throws Exception {
+	//...
+	//这个配置需要在添加Handler前设置
+	channel.pipeline().addLast("encoder", new StringEncoder());
+	channel.pipeline().addLast("decoder", new StringDecoder());
+    //...
+}
+在发送消息时，则可以直接通过ctx.writeAndFlush("心跳^v^" + Config.DATA_PACK_SEPARATOR)的形式来发送。
+
+接受消息，直接接收到的是String，不必转换成ByteBuf了
