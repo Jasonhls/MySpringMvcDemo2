@@ -76,6 +76,7 @@ public class ByteBufTest {
 
     /**
      * Composite Buffer 复合缓冲区
+     * Netty使用了CompositeByteBuf来优化套接字的I/O操作，尽可能消除了有JDK的缓冲区实现所导致的性能以及内存使用率的惩罚。
      */
     @Test
     public void test3() {
@@ -94,10 +95,75 @@ public class ByteBufTest {
 
         //使用数组访问数据
         if(!compBuf.hasArray()) {
-            int length = compBuf.readableBytes();
+            /**
+             * 由于上面执行过writeBytes，因此writableBytes()返回的写索引是directBuf中内容的长度，
+             * 而readableBytes()返回的读索引值仍然是0
+             */
+            int length = compBuf.writableBytes();
             byte[] array = new byte[length];
-            compBuf.getBytes(compBuf.readerIndex(), array);
+            compBuf.getBytes(0, array);
             System.out.println(new String(array, 0, length));
         }
     }
+
+    /**
+     * ByteBuf提供读/写索引，从0开始的索引，第一个字节索引是0，最后一个字节的索引是capacity-1
+     * heapBuf.capacity()方法返回是heapBuf中数组array的长度
+     *
+     * 对于已经读过的字节，我们需要回收，通过调用ByteBuf.discardReadBytes()来回收已经读取过的字节，
+     * discardReadBytes()将回收从索引0到readerIndex之间的字节。这个方法可以确保可写分段的最大化，它会导致内存的复制，
+     * 需要移动ByteBuf中可读字节到开始位置，所以该操作会导致时间开销。
+     */
+    @Test
+    public void test4() {
+        //创建一个16字节的buffer，这里默认是创建heap buffer
+        ByteBuf heapBuf = Unpooled.buffer(16);
+        //写数据到buffer
+        for (int i = 0;  i < 16; i++) {
+            heapBuf.writeByte(i + 1);
+
+        }
+        //读数据
+        for (int i = 0; i < heapBuf.capacity(); i++){
+            /**
+             * heapBuf.getByte(i)不会改变真实的读索引和写索引
+             * 可以通过ByteBuf的readerIndex()和writerIndex()方法来分别推进读索引和写索引
+             * heapBuf.readByte();  这个方法可以推进读索引readerIndex
+             *
+             */
+            System.out.println(heapBuf.getByte(i) + ", ");
+        }
+    }
+
+    /**
+     * 可读字节方法源码：
+     * @Override
+     * public boolean isReadable() {
+     *     return writerIndex > readerIndex;
+     * }
+     * 可写字节方法源码：
+     * @Override
+     * public boolean isWritable() {
+     *     return capacity() > writerIndex;
+     * }
+     * 清除缓冲区
+     *@Override
+     * public ByteBuf clear() {
+     *     readerIndex = writerIndex = 0;
+     *     return this;
+     * }
+     * 标记Mark和重置reset
+     * 每个ByteBuf有两个标记索引
+     * private int markedReaderIndex;   //标记读索引
+     * private int markedWriterIndex;   //标记写索引
+     *
+     * 衍生的缓冲区
+     * 调用duplicate()、slice()、slice(int index, int length)等方法可以创建一个现有缓冲区的视图(现有缓冲区与原有缓冲区是指向相同内存)，
+     * 衍生的缓冲区有独立的readerIndex和writerIndex和标记索引，如果需要现有的换缓冲区的全部副本，可以使用copy()获得。
+     *
+     * ByteBuffer的缺点：
+     * ByteBuffer的字节数组是final，也就是长度固定，一旦分配完成就不能扩容和收缩，灵活性低，而且当待存储对象字节很大可能出现数组越界，
+     * 用户使用起来稍不小心会出现异常。如果要避免越界，在存储之前就要求字节大小，如果buffer的空间不够就创建一个更大的新的ByteBuffer，
+     * 再将之前的ByteBuffer复制过去，效率很低。
+     */
 }
