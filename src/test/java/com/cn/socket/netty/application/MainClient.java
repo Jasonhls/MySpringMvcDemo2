@@ -17,7 +17,6 @@ public class MainClient {
         try{
             String host = "127.0.0.1";
             int port = 12345;
-            Thread.sleep(1);
             //初始化NettyMyConnection
             ConnectionManager.initConnection(new NettyMyClientConnection());
             /**

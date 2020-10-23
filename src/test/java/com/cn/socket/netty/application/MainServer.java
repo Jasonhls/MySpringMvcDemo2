@@ -10,7 +10,6 @@ import com.cn.socket.netty.application.server.NettyMyServer;
 public class MainServer {
     public static void main(String[] args) {
         try {
-            String host = "127.0.0.1";
             int port = 12345;
             /**
              * 启动服务端
