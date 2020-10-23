@@ -32,7 +32,7 @@ public class TimeClient {
                 }
             });
 
-            // Start the client
+            // Start the dispatcher
             ChannelFuture f = b.connect(host, port).sync();
 
             // Wait until the connection is closed
