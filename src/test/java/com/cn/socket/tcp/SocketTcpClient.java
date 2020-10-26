@@ -1,9 +1,8 @@
 package com.cn.socket.tcp;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -21,22 +20,22 @@ public class SocketTcpClient {
 		//创建socket地址
 		SocketAddress address = new InetSocketAddress(InetAddress.getLocalHost(), 8080);
 		socket.connect(address);
-		//创建PrintWriter
-		PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
-		BufferedReader socketIn = new BufferedReader(
-				new InputStreamReader(socket.getInputStream()));
-
 		//向服务器发送的内容
+		OutputStream os = socket.getOutputStream();
 		String sendStr = "客户端问服务器端：你们在吗";
-		socketOut.write(sendStr);
-		socketOut.flush();
+		os.write(sendStr.getBytes());
+		os.flush();
 		//等待服务器端响应
-		String receiveStr = socketIn.readLine();
-		System.out.println("服务器端回复：" + receiveStr);
+		InputStream is = socket.getInputStream();
+		byte[] bytes = new byte[1024];
+		int len;
+		if((len = is.read(bytes)) != -1) {
+			System.out.println("服务器端回复：" + new String(bytes, 0, len));
+		}
 
 		//关闭连接
-		socketOut.close();
-		socketIn.close();
+		is.close();
+		os.close();
 		socket.close();
 	}
 }

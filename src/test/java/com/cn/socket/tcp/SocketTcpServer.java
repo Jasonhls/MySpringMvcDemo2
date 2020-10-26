@@ -1,7 +1,8 @@
 package com.cn.socket.tcp;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.*;
 
 /**
@@ -19,21 +20,24 @@ public class SocketTcpServer {
 		serverSocket.bind(address);
 		System.out.println("等待客户端发送消息。。。");
 		//调用下面的方法的时候，当前程序就会实现阻塞
-		Socket accept = serverSocket.accept();
+		Socket socket = serverSocket.accept();
 		//获取OutputStream流
-		PrintWriter socketOut = new PrintWriter(accept.getOutputStream());
-		byte[] buf = new byte[1024];
-		if(accept.getInputStream().read(buf) > 0) {
-			System.out.println("服务器端接受到客户端消息：" + new String(buf));
+		OutputStream os = socket.getOutputStream();
+		InputStream is = socket.getInputStream();
+		byte[] bytes = new byte[1024];
+		int len;
+		if((len= is.read(bytes)) != -1) {
+			System.out.println("服务器端接受到客户端消息：" + new String(bytes, 0, len));
 		}
 		//服务器端响应消息
 		String sendStr = "我在";
-		socketOut.write(sendStr);
-		socketOut.flush();
+		os.write(sendStr.getBytes());
+		os.flush();
 
 		//关闭所有连接
-		socketOut.close();
-		accept.close();
+		os.close();
+		is.close();
+		socket.close();
 		serverSocket.close();
 
 	}
