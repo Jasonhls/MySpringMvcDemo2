@@ -2,6 +2,8 @@ package com.cn.resources;
 
 import org.junit.Test;
 
+import java.io.InputStream;
+
 /**
  * @description:
  * @author: helisen
@@ -10,6 +12,9 @@ import org.junit.Test;
 public class ResourcesTest {
     @Test
     public void test1() {
+        //得到的其实AppClassLoader，AppClassLoader是类Launch的内部类AppClassLoader
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        InputStream is = classLoader.getResourceAsStream("1.jpg");
 
     }
 }

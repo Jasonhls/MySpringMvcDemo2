@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <!--配置数据源-->
+    <!--<bean id="datasource" class="org.apache.commons.dgcp.BasicDataSource" destroy-method="close">
+
+    </bean>-->
+
+
+<!--    <bean id="datasource" class="org.apache.commons.dbcp"-->
+
+    <!--阿里巴巴框架 的druid连接池-->
+    <!--<bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="url" value=""/>
+        <property name="driverClassName" value=""/>
+        <property name="username" value=""/>
+        <property name="password" value=""/>
+    </bean>-->
+</beans>
+
+
