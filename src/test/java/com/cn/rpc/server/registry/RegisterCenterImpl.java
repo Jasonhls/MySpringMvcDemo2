@@ -40,6 +40,7 @@ public class RegisterCenterImpl implements IRegisterCenter{
             }
             //比如 /hls/
             String addressPath = servicePath + "/" + serviceAddress;
+            //创建临时结点，该节点的数据为字符串"0"
             String rsNode = curatorFramework.create().withMode(CreateMode.EPHEMERAL)
                     .forPath(addressPath, "0".getBytes());
             System.out.println("服务注册成功：" + rsNode);

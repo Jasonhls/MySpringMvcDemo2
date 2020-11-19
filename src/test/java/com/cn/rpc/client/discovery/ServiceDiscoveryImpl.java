@@ -41,6 +41,7 @@ public class ServiceDiscoveryImpl implements IServiceDiscovery{
     public String discover(String serviceName) {
         String path = ZkConfig.ZK_REGISTER_PATH + "/" + serviceName;
         try {
+            //获取path下所有的子结点集合
             repos = curatorFramework.getChildren().forPath(path);
         } catch (Exception e) {
             e.printStackTrace();
