@@ -27,9 +27,10 @@ public class RpcServerHandler extends ChannelInboundHandlerAdapter {
 
         //服务名称 IGpHello
         if(handlerMap.containsKey(request.getClassName())) {
-            Object clazz = handlerMap.get(request.getClassName());
-            Method method = clazz.getClass().getMethod(request.getMethodName(), request.getTypes());
-            method.invoke(clazz, request.getParams());
+            Object obj = handlerMap.get(request.getClassName());
+            Method method = obj.getClass().getMethod(request.getMethodName(), request.getTypes());
+            //返回接口方法处理的结果
+            result = method.invoke(obj, request.getParams());
         }
         //写给客户端result结果
         ctx.write(result);
