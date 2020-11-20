@@ -7,22 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description:
+ * @description: 通过set方法注入bean
  * @author: helisen
  * @create: 2020-10-26 09:09
  **/
 @Component
-public class TeacherDemo {
-    private List<StudentDemo> list = new ArrayList<>();
+public class AutowiredBySetterTwo {
+    private List<AutowiredDTO> list = new ArrayList<>();
 
     /**
      * 这样会多一个属性list
-     * @param studentDemo
+     * @param autowiredDTO
      */
     @Autowired
-    public void setList(StudentDemo studentDemo) {
-        if(studentDemo != null) {
-            list.add(studentDemo);
+    public void setList(AutowiredDTO autowiredDTO) {
+        if(autowiredDTO != null) {
+            list.add(autowiredDTO);
         }
     }
 }

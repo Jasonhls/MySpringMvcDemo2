@@ -10,7 +10,7 @@ import java.util.List;
  * @create: 2020-10-26 09:08
  **/
 @Component
-public class StudentDemo {
+public class AutowiredDTO {
     private String name;
     private Integer age;
     private List<String> hobbies;
