@@ -1,4 +1,4 @@
-package com.cn.subClassAndParentClass;
+package com.cn.subClassAndParentClass.testThree;
 
 import com.cn.service.DemoService;
 import com.cn.service.DemoServiceImpl;

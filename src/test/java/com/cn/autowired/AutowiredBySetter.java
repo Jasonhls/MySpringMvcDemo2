@@ -1,6 +1,7 @@
 package com.cn.autowired;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +15,7 @@ public class AutowiredBySetter {
     private AutowiredDTO autowiredDTO;
 
     @Autowired
+    @Qualifier(value = "autowiredDTO")
     public void setAutowiredDTO(AutowiredDTO autowiredDTO) {
         this.autowiredDTO = autowiredDTO;
     }

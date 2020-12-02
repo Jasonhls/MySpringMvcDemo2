@@ -1,5 +1,7 @@
 package com.cn.autowired;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -35,5 +37,20 @@ public class AutowiredTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AutowiredConfig.class);
         AutowiredBySetterTwo bean = context.getBean(AutowiredBySetterTwo.class);
         System.out.println(bean.toString());
+    }
+
+    @Before
+    public void beforeWay() {
+        System.out.println("测试开始之前：");
+    }
+
+    @After
+    public void afterWay() {
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void testDemo() {
+        System.out.println("我是测试方法。。。");
     }
 }

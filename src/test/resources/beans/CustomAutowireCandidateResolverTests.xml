@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <bean id="number-one" class="java.lang.String">
+        <meta key="priority" value="1"/>
+        <constructor-arg value="number-one"/>
+    </bean>
+
+    <!--autowire-candidate为false，表示不能被注入-->
+    <bean id="number1" class="java.lang.String" autowire-candidate="false">
+        <meta key="priority" value="1"/>
+        <constructor-arg value="number1"/>
+    </bean>
+
+    <bean id="number2" class="java.lang.String">
+        <meta key="priority" value="1"/>
+        <constructor-arg value="number2"/>
+    </bean>
+
+    <!--  这里可以用$连接，也可以直接用 . 隔开  -->
+    <bean id="resolver" class="com.cn.beans.factory.annotation.CustomAutowireCandidateResolverTests$CustomerAutowireCandidateResolver"/>
+<!--    <bean id="resolver" class="com.cn.beans.factory.annotation.CustomAutowireCandidateResolverTests#CustomerAutowireCandidateResolver"/>-->
+
+
+    <bean id="testBean" class="com.cn.beans.factory.annotation.CustomAutowireCandidateResolverTests.TestBean" autowire="constructor"/>
+</beans>
