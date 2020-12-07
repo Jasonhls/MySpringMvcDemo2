@@ -1,9 +1,6 @@
 package com.cn.beans.factory.annotation;
 
-import com.cn.test.simple.beans.ITestBean;
-import com.cn.test.simple.beans.MyBean;
-import com.cn.test.simple.beans.Student;
-import com.cn.test.simple.beans.TestBean;
+import com.cn.test.simple.beans.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +20,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
@@ -85,9 +83,58 @@ public class AutowiredAnnotationBeanPostProcessorTests {
         }
     }
 
+    @Test
+    public void test4() {
+        Constructor<?>[] declaredConstructors = ConstructorsResourceInjectionBean.class.getDeclaredConstructors();
+        for (Constructor c : declaredConstructors) {
+            System.out.println(c.getName());
+        }
+    }
 
 
 
+    public static class ConstructorsResourceInjectionBean {
+
+        protected ITestBean testBean3;
+
+        private ITestBean testBean4;
+
+        private NestedTestBean[] nestedTestBeans;
+
+        public ConstructorsResourceInjectionBean() {
+        }
+
+        @Autowired(required = false)
+        public ConstructorsResourceInjectionBean(ITestBean testBean4, NestedTestBean[] nestedTestBeans) {
+            this.testBean4 = testBean4;
+            this.nestedTestBeans = nestedTestBeans;
+        }
+
+        @Autowired(required = false)
+        public ConstructorsResourceInjectionBean(ITestBean testBean3) {
+            this.testBean3 = testBean3;
+        }
+
+        public ConstructorsResourceInjectionBean(NestedTestBean nestedTestBean) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ConstructorsResourceInjectionBean(ITestBean testBean3, ITestBean testBean4, NestedTestBean nestedTestBean) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ITestBean getTestBean3() {
+            return this.testBean3;
+        }
+
+        public ITestBean getTestBean4() {
+            return this.testBean4;
+        }
+
+        public NestedTestBean[] getNestedTestBeans() {
+            return this.nestedTestBeans;
+        }
+    }
 
 
     public static class MyResourceInjectionBean {
