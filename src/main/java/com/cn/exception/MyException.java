@@ -3,7 +3,7 @@ package com.cn.exception;
 import org.springframework.http.HttpStatus;
 
 /**
- * @description:
+ * @description: 自定义异常
  * @author: helisen
  * @create: 2020-12-09 18:14
  **/
