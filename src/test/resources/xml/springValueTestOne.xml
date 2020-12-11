@@ -11,7 +11,7 @@
 
     <!--方式一：-->
     <!--测试@Value注解的配置文件-->
-    <context:property-placeholder location="classpath:properties/db.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:com.cn.properties/db.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
     <!--上面方式等价于下面的方式，即上面方式是下面这种方式的缩写-->
     <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreUnresolvablePlaceholders" value="true"/>

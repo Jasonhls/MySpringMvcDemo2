@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author: helisen
  * @create: 2020-10-10 11:29
  **/
-@ControllerAdvice
-public class MyExceptionHandler {
-    @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ResponseData customHandlerException(Exception e) {
-        ResponseData responseData = new ResponseData();
-        responseData.setCode(500);
-        responseData.setMessage(e.getMessage());
-        return responseData;
-    }
-}
+//@ControllerAdvice
+//public class MyExceptionHandler {
+//    @ExceptionHandler(value = Exception.class)
+//    @ResponseStatus(HttpStatus.OK)
+//    @ResponseBody
+//    public ResponseData customHandlerException(Exception e) {
+//        ResponseData responseData = new ResponseData();
+//        responseData.setCode(500);
+//        responseData.setMessage(e.getMessage());
+//        return responseData;
+//    }
+//}

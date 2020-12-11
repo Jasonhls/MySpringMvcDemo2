@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @create: 2020-09-22 14:37
  **/
 @Configuration
-@PropertySource(value = {"/properties/application.properties"})
+@PropertySource(value = {"/com.cn.properties/application.properties"})
 public class EnvironmentPropertySourceConfig {
     @Resource
     private Environment environment;

@@ -13,7 +13,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  **/
 @Configuration
 @ComponentScan(value = {"com.cn.configParser.valueConfig"})
-@PropertySource(value = {"/properties/db.properties"})
+@PropertySource(value = {"/com.cn.properties/db.properties"})
 public class MyValueConfig {
     /**
      * 要想使用@Value 用${}占位符注入属性，这个bean是必须的，这个就是占位bean,另一种方式是不用value直接用Environment变量直接getProperty('key')

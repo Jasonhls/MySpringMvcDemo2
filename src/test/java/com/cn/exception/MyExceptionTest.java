@@ -22,7 +22,9 @@ public class MyExceptionTest {
         List<Class<? extends Throwable>> result = new ArrayList<>();
         for (Method method : declaredMethods) {
             ExceptionHandler mergedAnnotation = AnnotatedElementUtils.findMergedAnnotation(method, ExceptionHandler.class);
-            result.addAll(Arrays.asList(mergedAnnotation.value()));
+            if(mergedAnnotation != null) {
+                result.addAll(Arrays.asList(mergedAnnotation.value()));
+            }
         }
         System.out.println(result.toString());
     }
