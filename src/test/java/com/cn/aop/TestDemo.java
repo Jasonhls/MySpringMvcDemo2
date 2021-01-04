@@ -14,16 +14,29 @@ import java.util.List;
  * @create: 2020-12-28 10:59
  **/
 public class TestDemo {
+    /**
+     * 测试Spring中CGLIB动态代理
+     */
     @Test
-    public void test1() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("/aop/aspectTest.xml");
-        TestBean testBean= (TestBean) context.getBean("test");
-        testBean.test();
+    public void testCGLIB() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("/aop/cglib.xml");
+        CglibBean cglibBean = (CglibBean) context.getBean("test");
+        cglibBean.test();
+    }
+
+    /**
+     * 测试Spring中JDK动态代理
+     */
+    @Test
+    public void testJDK() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("/aop/jdk.xml");
+        JdkService bean = context.getBean(JdkService.class);
+        bean.test("hls");
     }
 
     @Test
     public void test2() {
-        Class<TestBean> beanClass = TestBean.class;
+        Class<CglibBean> beanClass = CglibBean.class;
         String beanName = beanClass.getName();
         if (!StringUtils.hasLength(beanName) || beanName.length() !=
                 beanClass.getName().length() + "&".length()) {

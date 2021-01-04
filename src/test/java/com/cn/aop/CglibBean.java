@@ -5,7 +5,7 @@ package com.cn.aop;
  * @author: helisen
  * @create: 2020-12-28 10:46
  **/
-public class TestBean {
+public class CglibBean {
     private String testStr = "testStr";
 
     public String getTestStr() {

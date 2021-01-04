@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.*;
 @Aspect
 public class AspectJTest {
 
+    //拦截所有的test方法
     @Pointcut("execution(* *.test(..))")
     public void test() {
 
