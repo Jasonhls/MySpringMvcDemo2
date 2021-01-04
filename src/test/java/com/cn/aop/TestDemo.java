@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @description:
  * @author: helisen
@@ -29,5 +32,21 @@ public class TestDemo {
          boolean b = (beanName.startsWith(beanClass.getName()) &&
                 beanName.endsWith("&"));
         System.out.println(b);
+    }
+
+    @Test
+    public void test3() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        System.out.println(list.get(0));
+        System.out.println(list.get(1));
+        System.out.println(list.get(2));
+        list.add(0, 9);
+        System.out.println(list.get(0));
+        System.out.println(list.get(1));
+        System.out.println(list.get(2));
+        System.out.println(list.get(3));
     }
 }
