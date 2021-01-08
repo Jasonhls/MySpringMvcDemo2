@@ -6,7 +6,7 @@ package com.cn.java8;
  * @create: 2020-11-26 15:04
  **/
 public class Student {
-    public String doSomething(String name , Person person) {
+    public String doSomething(final String name , Person person) {
         return name + person.eat("apple");
     }
 }
