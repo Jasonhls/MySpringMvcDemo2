@@ -205,6 +205,15 @@
       <version>1.14</version>
     </dependency>
 
+
+    <!--引入asm框架-->
+    <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>9.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

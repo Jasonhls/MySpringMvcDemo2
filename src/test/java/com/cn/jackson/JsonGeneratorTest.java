@@ -2,9 +2,9 @@ package com.cn.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class JsonGeneratorTest {
     @Test
     public void generatorJson() throws IOException {
-        ByteOutputStream bos = new ByteOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         JsonFactory jsonFactory = new JsonFactory();
         JsonGenerator generator = jsonFactory.createGenerator(bos);
         generator.writeStartObject();

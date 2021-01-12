@@ -4,4 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="banana" class="com.cn.configParser.importAndBeanTest.location.Banana"/>
+
+    <bean id="apple" class="com.cn.configParser.importAndBeanTest.Apple"/>
 </beans>

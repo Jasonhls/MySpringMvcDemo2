@@ -37,7 +37,7 @@ public class ConfigParserTest {
     @Test
     public void testImportConfig() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ImportConfig.class);
-        Apple apple = (Apple) context.getBean("com.cn.configParser.importAndBeanTest.Apple");
+        Apple apple = (Apple) context.getBean("apple");
         System.out.println(apple.getName() + "; " + apple.getColor() + "; " + apple.getTaste());
         Banana banana = (Banana) context.getBean("banana");
         System.out.println(banana.getName() + "; " + banana.getProducingArea());

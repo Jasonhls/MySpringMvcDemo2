@@ -74,15 +74,15 @@ public class TestDemo {
     @Test
     public void test4() throws Exception {
 
-        DefaultGeneratorStrategy instance = DefaultGeneratorStrategy.INSTANCE;
-        KeyFactory.Generator generator = new KeyFactory.Generator();
-        byte[] b = instance.generate(generator);
-
-//        AopMethodDemo amd = (AopMethodDemo)ReflectUtils.newInstance(AopMethodDemo.class);
-        Class hls = ReflectUtils.defineClass("hls", b, this.getClassLoader());
-        Object o = ReflectUtils.newInstance(hls);
-        AopMethodDemo amd = (AopMethodDemo)o;
-        System.out.println(amd.eat());
+//        DefaultGeneratorStrategy instance = DefaultGeneratorStrategy.INSTANCE;
+//        KeyFactory.Generator generator = new KeyFactory.Generator();
+//        byte[] b = instance.generate(generator);
+//
+////        AopMethodDemo amd = (AopMethodDemo)ReflectUtils.newInstance(AopMethodDemo.class);
+//        Class hls = ReflectUtils.defineClass("hls", b, this.getClassLoader());
+//        Object o = ReflectUtils.newInstance(hls);
+//        AopMethodDemo amd = (AopMethodDemo)o;
+//        System.out.println(amd.eat());
     }
 
     public ClassLoader getClassLoader() {
