@@ -11,9 +11,9 @@ import org.objectweb.asm.Type;
  * @author: helisen
  * @create: 2021-01-11 15:32
  **/
-public class AddSecurityCheckMethodAdapter extends MethodVisitor {
+public class AddSecurityCheckMethodVisitor extends MethodVisitor {
 
-    public AddSecurityCheckMethodAdapter(int api, MethodVisitor methodVisitor) {
+    public AddSecurityCheckMethodVisitor(int api, MethodVisitor methodVisitor) {
         super(api, methodVisitor);
     }
 

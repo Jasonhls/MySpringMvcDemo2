@@ -1,0 +1,2 @@
+根据AccountAsm的Class文件生成一个子类Class，然后根据该子类Class生成一个实例，然后执行方法，
+这种方式不会修改原类AccountAsm的Class文件

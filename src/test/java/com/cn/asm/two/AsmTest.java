@@ -1,17 +1,11 @@
 package com.cn.asm.two;
 
 import com.cn.asm.two.asm.AccountAsm;
-import com.cn.asm.two.asm.AddSecurityCheckClassAdapter;
+import com.cn.asm.two.asm.subclass.SecureAccountGenerator;
 import com.cn.asm.two.decorator.AccountWithSecurityCheck;
 import com.cn.asm.two.proxy.SecurityProxyInvocationHandler;
-import com.cn.subClassAndParentClass.testTwo.A;
 import org.junit.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.lang.reflect.Proxy;
 
 /**
@@ -45,26 +39,22 @@ public class AsmTest {
         account.operation();
     }
 
+    /**
+     * 使用ASM修改本类的Class文件内容，下面的test必须先去执行一次ModifyAccountAsmClass的main方法
+     * 每次maven clean都会清空class文件
+     */
     @Test
-    public void testAsm() throws Exception{
-        modifyAccountAsmClass();
+    public void testAsm(){
         AccountAsm accountAsm = new AccountAsm();
         accountAsm.operation();
     }
 
-    /**
-     * 修改AccountAsm的class文件的内容
-     * @throws Exception
-     */
-    public void modifyAccountAsmClass() throws Exception{
-        ClassReader cr = new ClassReader("com.cn.asm.two.asm.AccountAsm");
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        ClassVisitor classVisitor = new AddSecurityCheckClassAdapter(524288, cw);
-        cr.accept(classVisitor, ClassReader.SKIP_DEBUG);
-        byte[] data = cw.toByteArray();
-        File file = new File("target\\test-classes\\com\\cn\\asm\\two\\asm\\AccountAsm.class");
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(data);
-        fos.close();
+    @Test
+    public void testAsmSubclass() throws Exception{
+        SecureAccountGenerator secureAccountGenerator = new SecureAccountGenerator();
+        AccountAsm accountAsm = secureAccountGenerator.generateSecureAccount();
+        accountAsm.operation();
     }
+
+
 }
