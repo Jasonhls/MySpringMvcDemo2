@@ -1,0 +1,15 @@
+MethodVisitor中方法的介绍：
+visitCode() ：ASM开始扫描这个方法
+visitMaxs(maxStack, maxLocals)：该方法是visitEnd之前调用的方法，可以反复调用。
+用以确定类方法在执行时候得堆栈大小。
+visitEnd()：表示方法输出完毕。
+visitCode和visitMaxs方法可用于检测该方法的字节代码在一个事件序列中的开始与结束。
+和类的情况一样，visitEnd方法也必须在最后调用，用于检测一个方法在一个事件序列中结束。
+visitMethodInsn：访问方法的指令。方法指令是指调用方法的指令。
+visitVarInsn：访问局部变量指令。局部变量指令是加载loads或存储stores局部变量值的指令。
+需要注意的是，没有必要为了开始访问另一个方法，而结束当前访问的方法。
+实际上，MethodVisitor实例间是完全独立的，可以用任何顺序调用（但必须在cv.visitEnd()调用之前使用）
+
+ClassReader类解析一个编译后的方法，并且通过传递ClassVisitor作为accept方法的参数获得的返回，调用MethodVisitor相应的方法。
+ClassWriter的visitMethod返回了MethodVisitor抽象类的一个实现，该实现可以直接用二级制的方式构建编译后的方法。
+MethodVisitor类可以传递所有调用它的方法给另一个MethodVisitor类。MethodVisitor类可以看作是一个事件过滤器。

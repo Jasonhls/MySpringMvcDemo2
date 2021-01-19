@@ -1,0 +1,81 @@
+Spring统一异常处理有三种方式：
+1.使用@ExceptionHandler注解
+2.实现HandlerExceptionResolver接口
+3.使用@ControllerAdvice注解
+
+一：使用@ExceptionHandler注解
+只针对BuzController抛出的NullPointerException异常，将会捕获局部异常，返回指定内容
+@Controller
+public class BuzController {
+
+    @ExceptionHandler({NullPointerException.class})
+    public String exception(NullPointerException e) {
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+        return "null pointer exception";
+    }
+
+    @RequestMapping("test")
+    public void test() {
+        throw new NullPointerException("出错了！");
+    }
+}
+
+二：实现HandlerExceptionResolver接口
+@Component
+public class CustomMvcExceptionHandler implements HandlerExceptionResolver {
+
+    private ObjectMapper objectMapper;
+
+    public CustomMvcExceptionHandler() {
+        objectMapper = new ObjectMapper();
+    }
+
+    @Override
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
+                                         Object o, Exception ex) {
+        response.setStatus(200);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Cache-Control", "no-cache, must-revalidate");
+        Map<String, Object> map = new HashMap<>();
+        if (ex instanceof NullPointerException) {
+            map.put("code", ResponseCode.NP_EXCEPTION);
+        } else if (ex instanceof IndexOutOfBoundsException) {
+            map.put("code", ResponseCode.INDEX_OUT_OF_BOUNDS_EXCEPTION);
+        } else {
+            map.put("code", ResponseCode.CATCH_EXCEPTION);
+        }
+        try {
+            map.put("data", ex.getMessage());
+            response.getWriter().write(objectMapper.writeValueAsString(map));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView();
+    }
+}
+
+三：使用@ControllerAdvice注解
+跟第一种的区别是ExceptionHandler的定义和异常可以扩展到全局。
+@ControllerAdvice
+public class ExceptionController {
+    @ExceptionHandler(RuntimeException.class)
+    public ModelAndView handlerRuntimeException(RuntimeException ex) {
+        if (ex instanceof MaxUploadSizeExceededException) {
+            return new ModelAndView("error").addObject("msg", "文件太大！");
+        }
+        return new ModelAndView("error").addObject("msg", "未知错误：" + ex);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handlerMaxUploadSizeExceededException(Exception ex) {
+        if (ex != null) {
+            return new ModelAndView("error").addObject("msg", ex);
+        }
+
+        return new ModelAndView("error").addObject("msg", "未知错误：" + ex);
+
+    }
+}
+
