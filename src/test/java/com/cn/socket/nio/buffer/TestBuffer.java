@@ -47,10 +47,10 @@ public class TestBuffer {
         //buffer.limit()为5，初始化字节数组，五个元素默认值都为0
         byte[] dts = new byte[buffer.limit()];
         //从buffer拷贝length个元素到字节数组dts中，然后从数组索引为offset的位置开始存储拷贝过来的元素
-        //操作了三个元素，position为3
+        //操作了三个元素，position为3，把这三个元素放入dts数组中，从索引位置为2开始存放
         buffer.get(dts, 2, 3);
         //打印数组元素，从索引位置为offset开始，打印length个元素。
-        System.out.println(new String(dts, 0, 4));
+        System.out.println(new String(dts, 0, 5));
         //由于前面操作了三个元素，因此buffer.position为3
         System.out.println(buffer.position());
         //mark标记一下，记录当前position的位置，即mark由初始-1变成了3
