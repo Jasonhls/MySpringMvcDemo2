@@ -1,20 +1,24 @@
 package com.cn.xml;
 
-import org.apache.crimson.tree.XmlDocument;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.FileOutputStream;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 
 /**
  * @description:
  * @author: helisen
  * @create: 2021-02-01 13:42
  **/
-public class DomDemo {
+public class insertXml {
     /**
      * 遍历xml文档
      */
@@ -60,6 +64,7 @@ public class DomDemo {
             DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
             //把要解析的xml文档传入DOM解析器
             Document doc = dbBuilder.parse("src/test/resources/xml/school.xml");
+
             //得到文档名称为School的元素的节点列表
             NodeList nList = doc.getElementsByTagName("School");
             school = (Element)nList.item(0);
@@ -94,17 +99,27 @@ public class DomDemo {
 
             //将student作为子元素添加到树的根节点school
             school.appendChild(student);
-            //将内存中的文案的那个通过文件流生成insertSchool.xml，XmlDocument位于crison.jar下
-            ((XmlDocument)doc).write(new FileOutputStream("src/test/resources/xml/insertSchool.xml"));
+
+            //创建TransformerFactory对象
+            TransformerFactory tff = TransformerFactory.newInstance();
+            //创建Transformer对象
+            Transformer tf = tff.newTransformer();
+
+            //输出内容是否使用换行
+            tf.setOutputProperty(OutputKeys.INDENT,  "yes");
+            //创建xml文件并写入内容
+            tf.transform(new DOMSource(doc), new StreamResult(new File("src/test/resources/xml/insertSchool.xml")));
+            System.out.println("生成newSchool.xml成功");
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("生成newSchool.xml失败");
         }
     }
 
     public static void main(String[] args) {
         //读取
-        DomDemo.queryXml();
+        insertXml.queryXml();
         //插入
-        DomDemo.insertXml();
+        insertXml.insertXml();
     }
 }
