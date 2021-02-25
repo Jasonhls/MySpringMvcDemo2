@@ -20,6 +20,7 @@ public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer
      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
      </listener>
      * @return
+     * 指定跟容器的配置类Class
      */
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -40,6 +41,7 @@ public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer
      <async-supported>true</async-supported>
      </servlet>
      * @return
+     * 指定子容器的配置类Class
      */
     @Override
     protected Class<?>[] getServletConfigClasses() {
