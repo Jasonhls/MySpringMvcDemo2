@@ -20,19 +20,20 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description:
+ * @description: 解析或生成xml文件的四种方式：Dom方式，Dom4j方式（需要引入dom4j包），jDom方式（需要引入jdom包），Sax方式
  * @author: helisen
  * @create: 2021-02-02 15:32
  **/
 public class CreateNewXml {
 
+    /**
+     * 方式一：Dom写入
+     */
     @Test
     public void testCreateXmlByDom() {
         Long start = System.currentTimeMillis();
@@ -40,6 +41,25 @@ public class CreateNewXml {
         System.out.println("运行时间：" + (System.currentTimeMillis() - start));
     }
 
+    /**
+     * 方式二：Dom4j写入
+     */
+    @Test
+    public void testCreateXmlByDom4j() {
+        createXmlByDom4j();
+    }
+
+    /**
+     * jDom写入
+     */
+    @Test
+    public void testCreateXmlByJDom() {
+        createXmlByJDom();
+    }
+
+    /**
+     * 方法四：Sax写入
+     */
     @Test
     public void testCreateXmlBySax() {
         List<Student> list = new ArrayList<>();
@@ -52,16 +72,6 @@ public class CreateNewXml {
         s.setTel("123890");
         list.add(s);
         createXmlBySax(list);
-    }
-
-    @Test
-    public void testCreateXmlByDom4j() {
-        createXmlByDom4j();
-    }
-
-    @Test
-    public void testCreateXmlByJDom() {
-        createXmlByJDom();
     }
 
     /**
