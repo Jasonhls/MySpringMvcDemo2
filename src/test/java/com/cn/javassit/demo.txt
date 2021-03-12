@@ -1,0 +1,10 @@
+通过动态生成字节码的方式。操作java字节码的工具有两个比较流行，一个是ASM，一个是Javassit 。
+
+ASM ：直接操作字节码指令，执行效率高，要是使用者掌握Java类字节码文件格式及指令，对使用者的要求比较高。
+Javassit: 提供了更高级的API，执行效率相对较差，但无需掌握字节码指令的知识，对使用者要求较低。
+Javassist是一个开源的分析、编辑和创建Java字节码的类库。Javassist中最为重要的是ClassPool，CtClass，CtMethod 以及 CtField这几个类。
+
+ClassPool：一个基于HashMap实现的CtClass对象容器，其中键是类名称，值是表示该类的CtClass对象。默认的ClassPool使用与底层JVM相同的类路径，因此在某些情况下，可能需要向ClassPool添加类路径或类字节。
+CtClass：表示一个类，这些CtClass对象可以从ClassPool获得。
+CtMethods：表示类中的方法。
+CtFields ：表示类中的字段。
