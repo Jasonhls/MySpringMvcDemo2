@@ -22,3 +22,5 @@
 </beans>
 4）spring.handlers文件中，key就是步骤三中1处的值，另外得加转义字符\，比如为http\://com.cn.springxsd/demo，value为自定义的NamespaceHandlerSupport
 spring.schemas文件的key就是步骤三中2处的值，另外得加转义字符\，比如为http\://com.cn.springxsd/student/aaa.xsd，value为.xsd文件的位置路径
+5）一般对A，B进行规范命名，比如DTO为com.cn.springxsd包下的Student，那么A值一般命名为http://com.cn.springxsd/student，
+B值一般命名为http://com.cn.springxsd/student/student.xsd
