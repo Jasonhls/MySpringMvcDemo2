@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xmlns:myname="http://com.cn.springxsd/demo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+
+        http://com.cn.springxsd/demo
+        http://com.cn.springxsd/student/aaa.xsd
+        ">
+
+    <!--下面这个自定义标签是因为上面配置的xmlns:myname才有效的，xmlns:myname的值必须是.xsd文件中的xmlns的值-->
+    <myname:student id="1" name="hls"/>
+</beans>

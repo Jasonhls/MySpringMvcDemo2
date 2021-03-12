@@ -1,0 +1,24 @@
+使用spring xsd的注意事项：
+1）spring.handlers和spring.schemas文件必须都放在META-INF文件夹下，只能放在/META-INF/下，
+不能放在/META-INF/aaa/下，文件名是固定死的，只能为spring.handlers和spring.schemas
+2）.xsd文件中的xmlns的值可以随便指定一个值A，.xsd文件中的targetNamespace的值必须与xmlns的A值一致。
+3）启动配置xml文件中，可以自定义标签名，比如xmlns:aaa, 但是这个自定义标签的值必须为步骤2中的A值，
+同时必须在该xml文件中的xsi:schemaLocation标签的值中增加 上面指定的A值，同时随便指定一个值B，B值必须以.xsd结尾。
+比如下面这样：
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xmlns:myname="http://com.cn.springxsd/demo"   //自定义标签myname，其值为A值，必须与.xsd文件中的xmlns的值相同
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+
+        http://com.cn.springxsd/demo                   //A值，1处
+        http://com.cn.springxsd/student/aaa.xsd  //B值，可以随便指定，与A值没有任何关系，但必须以.xsd结尾，2处
+        ">
+
+    <!--下面这个自定义标签是因为上面配置的xmlns:myname才有效的，xmlns:myname的值必须是.xsd文件中的xmlns的值-->
+    <myname:student id="1" name="hls"/>
+</beans>
+4）spring.handlers文件中，key就是步骤三中1处的值，另外得加转义字符\，比如为http\://com.cn.springxsd/demo，value为自定义的NamespaceHandlerSupport
+spring.schemas文件的key就是步骤三中2处的值，另外得加转义字符\，比如为http\://com.cn.springxsd/student/aaa.xsd，value为.xsd文件的位置路径

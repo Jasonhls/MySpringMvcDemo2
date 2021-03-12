@@ -1,0 +1,2 @@
+#spring.schema中的key要和.xsd文件中的xmlns保持一致，反斜杠是为了转义，value是.xsd文件的位置
+http\://com.cn.springxsd/student/aaa.xsd=xsd/student.xsd

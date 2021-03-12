@@ -1,0 +1,2 @@
+#spring.handlers的key要和.xsd文件中的xmlns保持一致，反斜杠是为了转义，value是自定义的NamespaceHandlerSupport
+http\://com.cn.springxsd/demo=com.cn.springxsd.StudentNamespaceHandlerSupport
