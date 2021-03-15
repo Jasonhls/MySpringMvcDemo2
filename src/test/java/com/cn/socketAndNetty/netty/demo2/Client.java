@@ -30,6 +30,7 @@ public class Client {
     public void start(int port) {
         try {
             this.bootstrap.group(this.eventLoopGroup)
+                    //注意这里必须是NioSocketChannel.class，不能是NioServerSocketChannel.class（专门给server用的）
                     .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
