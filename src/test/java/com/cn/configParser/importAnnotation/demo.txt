@@ -1,0 +1,4 @@
+spring中@Import三种情况：
+1.导入配置@Configuration，被注解@Configuration注释的类就是配置文件，类似于spring2.5版本的import xml文件一样
+2.导入实现ImportSelector接口或子接口DeferredImportSelector的类
+3.定义实现了ImportBeanDefinitionRegistrar接口的类
