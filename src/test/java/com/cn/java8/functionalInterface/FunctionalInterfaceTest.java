@@ -10,6 +10,9 @@ import org.junit.Test;
 public class FunctionalInterfaceTest {
     @Test
     public void test() {
-
+        GreetingService greetingService = (message) -> {
+            System.out.println("say " + message + " to hls");
+        };
+        greetingService.sayMessage("hello");
     }
 }
