@@ -12,7 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  **/
 public class TestServer {
     public static void main(String[] args) throws Exception{
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup();
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -20,7 +20,7 @@ public class TestServer {
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new TestServerInitializer());
 
-            ChannelFuture channelFuture = serverBootstrap.bind(6668).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(7000).sync();//这里端口不要用6668，Google浏览器禁止访问这个端口
             channelFuture.channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
