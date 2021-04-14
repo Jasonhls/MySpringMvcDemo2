@@ -23,14 +23,14 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
     private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    //handlerAdded 表示连接建立，一单连接，第一个被执行
+    //handlerAdded 表示连接建立，一旦连接，第一个被执行
     //将当前channel加入到 channelGroup
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
         //将该客户加入聊天的信息推送给其他在线的客户端
         /**
-         * 该方法会将channelGroup中的 channel 遍历，并发送消息
+         * 该方法会将channelGroup中的 channel 遍历，并发送消息，也就是说给各个channel发送消息
          * 不需要自己再遍历
          */
         channelGroup.writeAndFlush("[客户端]" + channel.remoteAddress() + " 加入聊天 "+ sdf.format(new Date()) + "\n");
@@ -42,6 +42,7 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
+        //该方法会将channelGroup中的 channel 遍历，并发送消息，也就是说给各个channel发送消息
         channelGroup.writeAndFlush("[客户端]" + channel.remoteAddress() + " 离开了\n");
         System.out.println("channelGroup size " + channelGroup.size());
     }
