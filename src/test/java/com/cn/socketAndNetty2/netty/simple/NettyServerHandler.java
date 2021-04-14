@@ -29,7 +29,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //NioEventLoop的taskQueue中
 
         //解决方案1 用户程序自定义的普通任务
-        ctx.channel().eventLoop().execute(new Runnable() {
+        /*ctx.channel().eventLoop().execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -69,18 +69,21 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         }, 5, TimeUnit.SECONDS);
 
 
-        System.out.println("go on 。。。");
+        System.out.println("go on 。。。");*/
 
-//        System.out.println("服务器读取线程" + Thread.currentThread().getName());
-//        System.out.println("server ctx = " + ctx);
-//        System.out.println("看看channel 和 pipeline 的关系");
-//        Channel channel = ctx.channel();
-//        ChannelPipeline pipeline = ctx.pipeline(); //本质是一个双向链接，出站入站
-//        //将 msg 转成 ByteBuf
-//        //ByteBuf是 Netty提供的，不是NIO的ByteBuffer
-//        ByteBuf buf = (ByteBuf) msg;
-//        System.out.println("客户端发送消息是：" + buf.toString(CharsetUtil.UTF_8));
-//        System.out.println("客户端地址：" + channel.remoteAddress());
+        //如果WorkerEventLoopGroup中只配置了两个EventLoop，那么如果启动3个客户端，WorkerEventLoopGroup会轮询的方式分配EventLoop，
+        //第一个客户端使用第一个EventLoop，第二个客户端使用第二个EventLoop，第三个客户端还是使用的是第一个EventLoop，只不过每次
+        //处理客户端的请求连接，对应的channel是不同的，每次的channel都是不同的。
+        System.out.println("服务器读取线程" + Thread.currentThread().getName() + " 对应的channel=" + ctx.channel());
+        System.out.println("server ctx = " + ctx);
+        System.out.println("看看channel 和 pipeline 的关系");
+        Channel channel = ctx.channel();
+        ChannelPipeline pipeline = ctx.pipeline(); //本质是一个双向链接，出站入站
+        //将 msg 转成 ByteBuf
+        //ByteBuf是 Netty提供的，不是NIO的ByteBuffer
+        ByteBuf buf = (ByteBuf) msg;
+        System.out.println("客户端发送消息是：" + buf.toString(CharsetUtil.UTF_8));
+        System.out.println("客户端地址：" + channel.remoteAddress());
     }
 
     //数据读取完毕

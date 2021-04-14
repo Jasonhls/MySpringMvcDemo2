@@ -26,7 +26,7 @@ public class NettyServer {
         //比如服务器端有12个NioEventLoop，那么第一个客户端连接，用NioEventLoop1，第二个客户端连接，用NioEventLoop2 。。。，第12个客户端连接，用NioEventLoop12，
         // 那么第13个客户端来连接，就还是用NioEventLoop1，就这样循环。
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();//NioEventLoopGroup的构造方法可以设置个数，设置几个，属性children中就包含了几个NioEventLoop。
-        NioEventLoopGroup workGroup = new NioEventLoopGroup();
+        NioEventLoopGroup workGroup = new NioEventLoopGroup(2);
 
         try {
             //创建服务器端的启动对象，配置参数
@@ -36,7 +36,7 @@ public class NettyServer {
                     .channel(NioServerSocketChannel.class) //使用NioServerSocketChannel作为服务器的通道实现
                     .option(ChannelOption.SO_BACKLOG, 128) //设置线程队列等待连接的个数
                     .childOption(ChannelOption.SO_KEEPALIVE, true)  //设置保持活动连接状态
-                    .handler(null)   //该handler对应bossGroup，childHandler对应workerGroup
+//                    .handler(null)   //该handler对应bossGroup，childHandler对应workerGroup
                     .childHandler(new ChannelInitializer<SocketChannel>() { //创建一个通道测试对象（匿名对象）
                         //给pipeline设置处理器
                         @Override
