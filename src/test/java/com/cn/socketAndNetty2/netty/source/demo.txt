@@ -1,0 +1,22 @@
+说明：
+1）先看启动类，main方法中，首先创建了关于SSL的配置类
+2）重点分析下 创建了两个EventLoopGroup对象：
+    EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    EventLoopGroup workerGroup = new NioEventLoopGroup(2);
+（1）这两个对象是整个Netty的核心对象，可以说，整个Netty的运作都依赖于他们。bossGroup用于接受Tcp请求，它将
+请求交给workerGroup，workerGroup会获取到真正的连接，然后和连接进行通信，比如读写解码编码等操作。
+（2）EventLoopGroup是事件循环组（线程组）含有多个EventLoop，可以注册channel，用于在事件循环中去进行选择（和选择器相关）。
+（3）new NioEventLoopGroup(1)：这个1表示bossGroup事件组有1个线程你可以指定，如果new NioEventGroup()含有默认个线程 cup核数 * 2，
+即可充分的利用多核的优势。
+    DEFAULT_EVENT_LOOP_THREADS = Math.max(1, SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2))
+    会创建EventExecutor数组 children = new EventExecutor[nThreads];
+    每个元素的类型就是NIOEventLoop，NIOEventLoop实现了EventLoop接口和Executor接口，try块中创建了一个ServerBootstrap对象，它是一个引导类，
+用于启动服务器和引导整个程序的初始化。它和ServerChannel关联，而ServerChannel继承了Channel，有一些方法remoteAddress等。
+随后，变了b调用了group方法将两个group放入自己的字段中，用于后期引导使用（debug下group方法）。
+（4）然后添加了一个channel，其中参数一个Class对象，引导类将通过这个Class对象反射创建ChannelFactory。然后添加了一些TCP的参数。（说明：
+channel的创建在bind方法，可以Debug下bind，具体如下：会找到channel = channelFactory.newChannel()）
+（5）再添加了一个服务器专属的日志处理器handler。
+（6）再添加一个SocketChannel（不是ServerSocketChannel）的handler。
+（7）然后绑定端口并阻塞至连接成。
+（8）最后main线程阻塞等待关闭。
+（9）finally块中的代码将在服务器关闭时优雅关闭所有资源。
