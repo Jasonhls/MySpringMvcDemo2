@@ -1,8 +1,10 @@
 package com.cn.controller;
 
+import com.cn.listener.MyPublisherEvent;
 import com.cn.pojo.Student;
 import com.cn.service.DemoService;
 import com.cn.service.IndexService;
+import org.checkerframework.common.reflection.qual.GetMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ public class IndexController {
     private IndexService indexService;
     @Autowired
     private DemoService demoService;
+    @Autowired
+    private MyPublisherEvent publisherEvent;
 
     @RequestMapping(value = "/abc")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -54,5 +58,11 @@ public class IndexController {
         return s;
     }
 
+    @RequestMapping(value = "/testListener")
+    @ResponseBody
+    public String testListener() {
+        publisherEvent.test();
+        return "ok";
+    }
 
 }
