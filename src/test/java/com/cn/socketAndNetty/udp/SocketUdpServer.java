@@ -33,7 +33,8 @@ public class SocketUdpServer {
 		 */
 		//1.创建数据报，用于响应客户端
 		byte[] data2 = "你好，我是服务器端".getBytes();
-		DatagramPacket packet2 =new DatagramPacket(data2, data2.length);
+		//注意：这里需要指定SocketAddress，根据原来接受数据的DatagramPacket去获取
+		DatagramPacket packet2 =new DatagramPacket(data2, data2.length, packet.getSocketAddress());
 		//2.向客户端发送数据
 		String sendStr = new String(data2, 0, data2.length);
 		System.out.println("服务器端向客户端发送数据：" + sendStr);

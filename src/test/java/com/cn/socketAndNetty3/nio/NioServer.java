@@ -40,13 +40,13 @@ public class NioServer {
         ServerSocketChannel serverSocketChannel = null;
         try {
             int port = 8888;
-            //创建选择器
+            //创建选择器（返回的对象为WindowsSelectorImpl对象）
             selector = Selector.open();
-            //打开监听通道
+            //打开监听通道（返回的对象为ServerSocketChannelImpl对象）
             serverSocketChannel = ServerSocketChannel.open();
             //开启非阻塞模式
             serverSocketChannel.configureBlocking(false);
-            //绑定端口，backlog大小设为1024
+            //绑定端口，backlog大小设为1024，socket()方法返回的为ServerSocketAdaptor对象
             serverSocketChannel.socket().bind(new InetSocketAddress(port), 1024);
             //监听客户端连接请求
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
