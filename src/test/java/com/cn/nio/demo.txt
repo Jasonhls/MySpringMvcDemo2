@@ -1,0 +1,36 @@
+/**
+ * Writing Data to a Buffer:
+ * 1.Write data from a Channel into a Buffer
+ *   int bytesRead = inChannel.read(buf);
+ * 2.Write data into the Buffer yourself, via the buffer's put() methods
+ *  buf.put("哈哈");
+ *
+ *
+ * Reading Data from a Buffer:
+ * 1. Read data from the buffer into a channel
+ *  int bytesWritten = inChannel.write(buf);
+ * 2. Read data from the buffer yourself, using one of the get() methods
+ *  byte aByte = buf.get();
+ *
+ */
+
+read和write方法都属于SocketChannel的方法
+put和get方法都属于Buffer的方法
+解释：
+read方法是从SocketChannel中读出数据，写入到Buffer中
+write方法是从Buffer中读出数据，写入到SocketChannel中
+put方法是直接往Buffer中写入数据
+get方法是直接从Buffer中读出数据
+
+buffer，经过put--->flip--->write--->compact的过程，position,limit和capacity的变化如下：
+position,limit和capacity刚开始为：0,1024,1024
+经过put变成：35,1024,1024
+经过flip变成：0,35,1024
+经过write变成：35,35,1024
+经过compact变成：0,1024,1024
+buffer，经过read--->flip--->get--->compact的过程，position,limit和capacity的变化如下：
+position,limit和capacity刚开始为：0,1024,1024
+经过read变成：35,1024,1024
+经过flip变成：0,35,1024
+经过get变成：35,35,1024
+经过compact变成：0,1024,1024
