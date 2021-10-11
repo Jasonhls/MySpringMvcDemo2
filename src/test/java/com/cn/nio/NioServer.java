@@ -53,11 +53,11 @@ public class NioServer {
                 if(key.isAcceptable()) {
                     handleAccept(key);
                 }else if(key.isConnectable()) {
-                    handleConnection(key);
+                    handleConnect(key);
                 }else if(key.isReadable()) {
-                    handleReadable(key);
+                    handleRead(key);
                 }else if(key.isWritable()) {
-                    handleWritable(key);
+                    handleWrite(key);
                 }
                 iterator.remove();
             }
@@ -73,14 +73,14 @@ public class NioServer {
         socketChannel.register(key.selector(), SelectionKey.OP_READ, ByteBuffer.allocate(1024));
     }
 
-    private static void handleConnection(SelectionKey key) {
+    private static void handleConnect(SelectionKey key) {
         System.out.print("connection---------");
         System.out.print(key.channel());
         System.out.print("     ");
         System.out.println(key.selector());
     }
 
-    private static void handleReadable(SelectionKey key) throws IOException {
+    private static void handleRead(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = (ByteBuffer) key.attachment();
 
@@ -109,7 +109,7 @@ public class NioServer {
         socketChannel.close();
     }
 
-    private static void handleWritable(SelectionKey key) throws IOException {
+    private static void handleWrite(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = (ByteBuffer) key.attachment();
         buffer.flip(); //make buffer ready for read
