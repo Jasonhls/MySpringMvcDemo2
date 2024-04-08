@@ -1,4 +1,4 @@
-package com.cn.aop;
+package com.cn.aop.xml;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -39,14 +39,15 @@ public class AspectJTest {
      */
     @Around("test()")
     public Object aroundTest(ProceedingJoinPoint p) {
-        System.out.println("before1");
+        System.out.println("开始执行代理");
         Object result = null;
         try {
             result = p.proceed();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+            System.out.println("正常业务报错了");
         }
-        System.out.println("after1");
+        System.out.println("结束执行代码");
         return result;
     }
 }

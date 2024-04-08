@@ -1,4 +1,4 @@
-package com.cn.aop;
+package com.cn.aop.xml;
 
 /**
  * @description:
@@ -17,7 +17,7 @@ public class CglibBean {
     }
 
     public void test() {
-        System.out.println("test");
+        System.out.println("执行cglib业务代码");
     }
 
 }

@@ -6,5 +6,5 @@ package com.cn.aop.jdk;
  * @create: 2020-12-31 11:18
  **/
 public interface UserService {
-    public abstract void add();
+    void add(String name);
 }

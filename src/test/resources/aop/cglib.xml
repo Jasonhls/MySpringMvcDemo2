@@ -13,6 +13,6 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean id="test" class="com.cn.aop.CglibBean"/>
-    <bean class="com.cn.aop.AspectJTest"/>
+    <bean id="cglibBean" class="com.cn.aop.xml.CglibBean"/>
+    <bean class="com.cn.aop.xml.AspectJTest"/>
 </beans>

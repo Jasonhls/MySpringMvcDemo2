@@ -1,0 +1,166 @@
+1、Buffer缓冲区：
+    缓冲区其实本质上就是一块支持读/写操作的内存，底层是由多个内存页组成的数组，我们可以将其称之为内存块，在Java中这块内存则被封装成了 Buffer 对象，
+需要使用可直接通过已提供的 API 对这块内存进行操作和管理。
+Java中的缓冲区也被分为了两大类：
+    本地直接内存缓冲区与堆内存缓冲区 ，前面 Buffer 类的所有子实现类 xxxBuffer 本质上还是抽象类，每个子抽象类都会有
+DirectXxxBuffer、HeapXxxBuffer 两个具体实现类，这两者的主要区别在于：创建缓冲区的内存是位于堆空间之内还是之外。
+    由于堆缓冲区创建后是存在于堆空间中的，所以 IO 数据必须要经过一次本地内存的“转发后”才能达到堆内存，因此效率自然会低一些，
+同时也会占用Java堆空间。所以如若追求更好的 IO 性能，或 IO 数据过于庞大时，可通过 xxxBuffer.allocateDirect() 方法创建本地缓冲区使用，
+也可以通过 isDirect() 方法来判断一个缓冲区是否基于本地内存创建。
+2、Channel通道
+    NIO中的通道与BIO中的流对象类似，但BIO中要么是输入流，要么是输出流，通常流操作都是单向传输的。而通道的功能也是用于传输数据，但它却是一个
+双向通道，代表着我们既可以从通道中读取对端数据，也可以使用通道向对端发送数据。
+    这个通道可以是一个本地文件的IO连接，也可以是一个网络Socket套接字连接。Java中的Channel定义如下：
+//NIO包中定义的Channel通道接口
+public interface Channel extends Closeable {
+    //判断通道是否处于开启状态
+    public boolean isOpen();
+    //关闭通道
+    public void close() throws IOException;
+}
+Channel常用的子类如下：
+FileChannel:用于读取、写入、映射和操作本地文件的通道。
+DatagramChannel:读写网络IO中UDP数据的通道抽象类。
+SocketChannel:读写网络IO中TCP数据的通道抽象类。
+ServerSocketChannel:类似于BIO的ServerSocket，用于监听TCP连接的通道抽象类。
+实现 Channel 接口的都是抽象类，最终具体的功能则是这些抽象类的实现类 xxxChannelImpl 去完成的，
+所以 Channel 通道在Java中是三层定义： 顶级接口→二级抽象类→三级实现类。
+常用的是ServerSocketChannel,SocketChannel
+ServerSocketChannel定义如下：
+public abstract class ServerSocketChannel
+    extends AbstractSelectableChannel
+    implements NetworkChannel
+{
+    //构造方法：需要传递一个选择器进行初始化构建
+    protected ServerSocketChannel(SelectorProvider provider);
+    //打开一个ServerSocketChannel通道
+    public static ServerSocketChannel open() throws IOException;
+    //绑定一个IP地址作为服务端
+    public final ServerSocketChannel bind(SocketAddress local);
+    //绑定一个IP并设置并发连接数大小，超出后的连接全部拒绝
+    public abstract ServerSocketChannel bind(SocketAddress local, int backlog);
+    //监听客户端连接的方法(会发生阻塞的方法)
+    public abstract SocketChannel accept() throws IOException;
+    //获取一个ServerSocket对象
+    public abstract ServerSocket socket();
+    // ...省略其他方法...
+}
+
+ServerSocketChannel的作用与BIO中的ServerSocket类似，主要负责监听客户端到来的Socket连接，但观察如上代码，
+你会发现它并未定义数据传输(读/写)的方法，因此要牢记：ServerSocketChannel只负责管理客户端连接，并不负责数据传输。
+//1、打开一个ServerSocketChannel监听
+ServerSocketChannel ssc = ServerSocketChannel.open();
+//2、绑定监听的IP地址与端口号
+ssc.bind(new InetSocketAddress("127.0.0.1", 8888));
+//也可以这样绑定
+ssc.socket().bind(new InetSocketAddress("127.0.0.1", 8888));
+//3、监听客户端连接
+while(true) {
+    //不断尝试获取客户端的socket连接
+    SocketChannel sc = ssc.accept();
+    //如果为null则代表没有连接到来，非空代表有连接
+    if(sc != null) {
+        //处理客户端连接
+    }
+}
+SocketChannel定义如下：
+public abstract class SocketChannel extends AbstractSelectableChannel
+    implements ByteChannel, ScatteringByteChannel,
+               GatheringByteChannel, NetworkChannel{
+    //打开一个通道
+    public static SocketChannel open();
+    //根据指定的远程地址，打开一个通道
+    public static SocketChannel open(SocketAddress remote);
+    //如果调用open()方法时未给定地址，可以通过该方法连接远程地址
+    public abstract SocketChannel connect(SocketAddress remote);
+    //将当前通道绑定到本地套接字地址上
+    public abstract SocketChannel bind(SocketAddress local);
+    //把当前通道注册到Selector选择器上：
+    // sel：要注册的选择器、ops：事件类型、att：共享属性。
+    public final SelectionKey register(Selector sel, int ops, Object att);
+    // 省略其他......
+    // 关闭通道
+    public final void close();
+
+    // 向通道中写入数据，数据通过缓冲区的方式传递
+    public abstract int write(ByteBuffer src);
+    // 根据给定的起始下标和数量，将缓冲区数组中的数据写入到通道中
+    public abstract long write(ByteBuffer[] srcs,int offset,int length);
+    // 向通道中批量写入数据，批量写入一个缓冲区数组
+    public final long write(ByteBuffer[] srcs);
+    // 从通道中读取数据（读取的数据放入到dst缓冲区中）
+    public abstract int read(ByteBuffer dst);
+    // 根据给定的起始下标和元素数据，在通道中批量读取数据
+    public abstract long read(ByteBuffer[] dsts,int offset,int length);
+    // 从通道中批量读取数据，结果放入dits缓冲区数组中
+    public final long read(ByteBuffer[] dsts);
+
+    // 返回当前通道绑定的本地套接字地址
+    public abstract SocketAddress getLocalAddress();
+    // 判断目前是否与远程地址建立上了连接关系
+    public abstract boolean isConnected();
+    // 判断目前是否与远程地址正在建立连接
+    public abstract boolean isConnectionPending();
+    // 获取当前通道连接的远程地址，null代表未连接
+    public abstract SocketAddress getRemoteAddress();
+    // 设置阻塞模式，true代表阻塞，false代表非阻塞
+    public final SelectableChannel configureBlocking(boolean block);
+    // 判断目前通道是否为打开状态
+    public final boolean isOpen();
+
+}
+SocketChannel提供三类方法：
+a、管理类：如打开通道、连接远程地址、绑定地址、注册选择器、关闭通道等。
+b、操作类：读取/写入数据、批量读取/写入、自定义读取/写入等。
+c、查询类：检查是否打开连接、是否建立了连接、是否正在连接等。
+
+3、Selector选择器
+Selector 是 NIO 的核心组件，它可以负责监控一个或多个 Channel 通道，并能够检测出那些通道中的数据已经准备就绪，可以支持读取/写入了，
+因此一条线程通过绑定一个选择器，就可以实现对多个通道进行管理，最终达到一条线程处理多个连接的效果，能够在很大程度上提升网络连接的效率。
+public abstract class Selector implements Closeable {
+    // 创建一个选择器
+    public static Selector open() throws IOException;
+    // 判断一个选择器是否已打开
+    public abstract boolean isOpen();
+    // 获取创建当前选择器的生产者对象
+    public abstract SelectorProvider provider();
+    // 获取所有注册在当前选择的通道连接
+    public abstract Set<SelectionKey> keys();
+    // 获取所有数据已准备就绪的通道连接
+    public abstract Set<SelectionKey> selectedKeys();
+    // 非阻塞式获取就绪的通道，如若没有就绪的通道则会立即返回
+    public abstract int selectNow() throws IOException;
+    // 在指定时间内，阻塞获取已注册的通道中准备就绪的通道数量
+    public abstract int select(long timeout) throws IOException;
+    // 获取已注册的通道中准备就绪的通道数量（阻塞式）
+    public abstract int select() throws IOException;
+    // 唤醒调用Selector.select()方法阻塞后的线程
+    public abstract Selector wakeup();
+    // 关闭创建的选择器（不会关闭通道）
+    public abstract void close() throws IOException;
+}
+    当想要实现非阻塞式IO时，必然用到Selector选择器，它可以帮我们实现一个线程管理多个连接的功能。但若想要使用选择器，
+必须先将对应的通道注册到选择器上，然后再调用选择器的select方法去监听注册的所有通道。
+    不过在向选择器注册通道时，需要为通道绑定一个或多个事件，注册后选择器会根据通道的事件进行切换，只有当通道读/写事件发生时，
+才会触发读写，因而可通过Selector选择器实现一条线程管理多个通道。当然，选择器一共支持4种事件：
+SelectionKey.OP_READ/1
+SelectionKey.OP_WRITE/1
+SelectionKey.OP_CONNECT/8
+SelectionKey.OP_ACCEPT/16
+当一个通道注册时，会为其绑定对应的事件，当该通道触发了一个事件，就代表着该事件已经准备就绪，可以被线程操作了。
+当然，如果要为一条通道绑定多个事件，那可通过 位或 操作符拼接：
+int event = SelectionKey.OP_READ | SelectionKey.OP_WRITE;
+一条通道除开可以绑定多个事件外，还能注册多个选择器，但同一选择器只能注册一次，如多次注册相同选择器就会报错。
+注意：
+①并非所有的通道都可使用选择器，比如 FileChannel 无法支持非阻塞特性，因此不能与 Selector 一起使用（使用选择器的前提是：通道必须处于非阻塞模式）。
+②同时，并非所有的事件都支持任意通道，比如 OP_ACCEPT 事件则仅能提供给 ServerSocketChannel 使用。
+
+每个客户端连接本质上对应着一个 Channel 通道，而一个通道也有一个与之对应的 Buffer 缓冲区，在客户端尝试连接服务端时，会利用通道将其注册到选择器上，
+这个选择器则会有一条对应的线程。在开始工作后，选择器会根据不同的事件在各个通道上切换，对于已就绪的数据会基于通道与 Buffer 缓冲区进行读写操作。
+
+简单而言，在这三者之间， Buffer 负责存取数据， Channel 负责传输数据，而 Selector 则会决定操作那个通道中的数据.
+
+
+
+
+

@@ -10,6 +10,6 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean id="jdkServiceImpl" class="com.cn.aop.JdkServiceImpl"/>
-    <bean class="com.cn.aop.AspectJTest"/>
+    <bean id="jdkServiceImpl" class="com.cn.aop.xml.JdkServiceImpl"/>
+    <bean class="com.cn.aop.xml.AspectJTest"/>
 </beans>

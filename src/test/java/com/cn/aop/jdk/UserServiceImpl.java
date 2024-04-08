@@ -7,7 +7,7 @@ package com.cn.aop.jdk;
  **/
 public class UserServiceImpl implements UserService{
     @Override
-    public void add() {
-        System.out.println("---------add------------");
+    public void add(String name) {
+        System.out.println("添加姓名：" + name);
     }
 }

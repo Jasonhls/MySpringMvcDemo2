@@ -1,0 +1,28 @@
+3.3.2、异步通道分组
+AsynchronousChannelGroup 主要是用来管理异步通道的分组，也可以实现线程资源的共享，
+在创建分组时可以为其绑定一个或多个线程池，然后创建通道时，可以指定分组，如下：
+group = AsynchronousChannelGroup.withThreadPool(servicePool);
+serverChannel = AsynchronousServerSocketChannel.open(group);
+上面首先创建了一个 group 分组并绑定了一个线程池，然后在创建服务端通道将其分配到了 group 这个分组中，
+那此时连接 serverChannel 的所有客户端通道，都会共享 servicePool 这个线程池的线程资源。这个线程池中的线程，则负责类似于 NIO 中 Selector 的工作。
+3.3.3、异步回调处理
+CompletionHandler 则是 AIO 较为核心的一部分，主要是用于 Server 服务端的，前面聊到过： AIO 中，对于 IO 请求的数据，会先交由 OS 处理，
+然后等 OS 处理完成后再通知应用程序进行具体的业务操作 。而 CompletionHandler 则作为异步 IO 数据结果的回调接口，用于定义操作系统在处理好 IO 数据之后的回调工作。
+CompletionHandler 接口中主要存在 completed()、failed() 两个方法，分别对应 IO 数据处理成功、失败的回调工作。
+当然，对于 AIO 的回调工作，也允许通过 Future 处理，但最好还是定义 CompletionHandler 处理。
+其实对于 Java 中的异步回调机制，在之前的 《并发编程-CompletableFuture分析篇》 曾详细讲到过，其中分析过 CompletionStage 回调接口，这与 AIO 中的回调执行有异曲同工之妙。
+3.3.4、AIO的底层实现
+Java-BIO 本质上是同步调用内核所提供的 read()/write()/recvfrom() 等函数实现的。
+Java-NIO 则是通过调用内核所提供的 select/poll/epoll/kqueue 等函数实现。
+而 Java-AIO 这种异步非阻塞式 IO 也是由操作系统进行支持的，在 Windows 系统中提供了一种异步 IO 技术： IOCP(I/O Completion Port ，
+所以 Windows 下的 Java-AIO 则是依赖于这种机制实现。不过在 Linux 系统中由于没有这种异步 IO 技术，所以 Java-AIO 在 Linux 环境中使用的还是 epoll 这种多路复用技术进行模拟实现的。
+
+BIO，NIO，AIO区别：
+Java-BIO ：当客户端到来连接请求时，就会分配一条线程处理。
+Java-NIO ：客户端的连接请求会先注册到选择器上，选择器轮询到有事件触发时，才会分配一条线程处理。
+Java-AIO ：客户端的连接到来后同样会先注册到选择器上，但客户端的 I/O 请求会先交由 OS 处理，当内核将数据拷贝完成后才会分配一条线程处理。
+
+其实 Java-NIO、AIO 方面的设计，无论是从使用简洁度而言，还是从源码的可观性而言，其实都并不算理想，如若有小伙伴阅读过 JUC 包的源码，再回来对比 NIO 包的源码，
+两者差别甚大，所以本质上在之后的过程中，如若要用到 Java-NIO、AIO 方面的技术，一般都会采用 Netty 框架实现， Netty 这个网络通信框架则对 nio 包提供的原生
+IO-API 进一步做了封装，也解决了 NIO 包下原生 API 存在的诸多问题，因此在后续的文章中也会重点分析 Netty 这个框架
+
