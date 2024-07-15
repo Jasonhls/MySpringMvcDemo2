@@ -1,11 +1,9 @@
 package com.cn.utils;
 
 import org.junit.Test;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @description:
@@ -20,7 +18,7 @@ public class BaseUtil {
      * @throws IOException
      */
     public static byte[] decryBASE64(String key) throws IOException {
-        return new BASE64Decoder().decodeBuffer(key);
+        return Base64Utils.decodeFromString(key);
     }
 
     /**
@@ -29,7 +27,7 @@ public class BaseUtil {
      * @return
      */
     public static String encryptBASE64(byte[] key) {
-        return new BASE64Encoder().encode(key);
+        return Base64Utils.encodeToString(key);
     }
 
     @Test

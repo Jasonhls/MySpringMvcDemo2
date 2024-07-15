@@ -1,7 +1,6 @@
 package com.cn.utils;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.springframework.util.Base64Utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -55,7 +54,7 @@ public class AesUtils {
             //加密操作,返回加密后的字节数组，然后需要编码。主要编解码方式有Base64, HEX, UUE,7bit等等。此处看服务器需要什么编码方式
             byte[] encryptedData = cipher.doFinal(cleartext.getBytes(CODE_TYPE));
 
-            return new BASE64Encoder().encode(encryptedData);
+            return Base64Utils.encodeToString(encryptedData);
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -70,7 +69,7 @@ public class AesUtils {
      */
     public static String decrypt(String encrypted) {
         try {
-            byte[] byteMi = new BASE64Decoder().decodeBuffer(encrypted);
+            byte[] byteMi = Base64Utils.decodeFromString(encrypted);
             IvParameterSpec zeroIv = new IvParameterSpec(VIPARA.getBytes());
             SecretKeySpec key = new SecretKeySpec(
                     AES_KEY.getBytes(), "AES");
